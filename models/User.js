@@ -44,6 +44,11 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
     comment: 'האם המשתמש פעיל במערכת' // Is active
+  },
+  isApproved: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    comment: 'האם המשתמש אושר על ידי מנהל' // Is approved by admin
   }
 }, {
   tableName: 'users',

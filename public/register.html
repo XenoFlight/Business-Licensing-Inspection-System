@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הרשמה למערכת | רישוי עסקים</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            direction: rtl;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: right;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #28a745;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #error-message {
+            color: red;
+            margin-top: 1rem;
+            min-height: 1.2em;
+            font-size: 0.9rem;
+        }
+        .link-text {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .link-text a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .link-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>הרשמה למערכת</h1>
+        <form id="register-form">
+            <div class="input-group">
+                <label for="fullName">שם מלא</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+            <div class="input-group">
+                <label for="email">דואר אלקטרוני</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">סיסמה</label>
+                <input type="password" id="password" name="password" required minlength="6">
+            </div>
+            <div class="input-group">
+                <label for="role">תפקיד</label>
+                <select id="role" name="role">
+                    <option value="inspector">מפקח</option>
+                    <option value="manager">מנהל</option>
+                </select>
+            </div>
+            <button type="submit">הרשמה</button>
+        </form>
+        <p id="error-message"></p>
+        <div class="link-text">
+            כבר רשום? <a href="login.html">התחבר כאן</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            errorMessage.textContent = '';
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fullName, email, password, role })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('ההרשמה בוצעה בהצלחה! חשבונך הועבר לאישור מנהל המערכת. תוכל להתחבר לאחר קבלת האישור.');
+                    window.location.href = 'login.html';
+                } else {
+                    errorMessage.textContent = data.message || 'שגיאה בהרשמה';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'שגיאת תקשורת. נסה שוב מאוחר יותר.';
+            }
+        });
+    </script>
+
+</body>
+</html>

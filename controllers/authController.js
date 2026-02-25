@@ -65,6 +65,11 @@ exports.login = async (req, res) => {
     // בדיקת סיסמה (שימוש במתודה מהמודל)
     // Check password
     if (user && (await user.matchPassword(password))) {
+      // בדיקה אם המשתמש מאושר
+      if (!user.isApproved) {
+        return res.status(403).json({ message: 'החשבון שלך ממתין לאישור מנהל המערכת.' });
+      }
+
       res.json({
         _id: user.id,
         fullName: user.fullName,
