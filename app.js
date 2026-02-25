@@ -11,7 +11,7 @@ const defectRoutes = require('./routes/defectRoutes');
 // Initialize App
 const app = express();
 
-// הגדרת Trust Proxy עבור Render (ו-Load Balancers אחרים)
+// הגדרת Trust Proxy עבור Railway (ו-Load Balancers אחרים)
 app.set('trust proxy', 1);
 
 // הגדרות אבטחה ולוגים

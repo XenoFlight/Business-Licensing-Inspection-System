@@ -159,7 +159,7 @@ const createReportHTML = (reportData) => {
 const generateReportPDF = async (reportData) => {
   let browser;
   try {
-    // הגדרות להרצה ב-Production (Render/Cloud)
+    // הגדרות להרצה ב-Production (Railway/Cloud)
     const browserArgs = process.env.NODE_ENV === 'production' 
       ? ['--no-sandbox', '--disable-setuid-sandbox'] 
       : [];

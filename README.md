@@ -10,7 +10,7 @@ A comprehensive backend system for managing business licensing and on-site inspe
 *   **PDF Generation**: Automated generation of Hebrew inspection reports using **Puppeteer** (supports RTL and Hebrew fonts).
 *   **AI Integration**: **Google Gemini AI** integration to automatically analyze inspection findings and generate risk assessments.
 *   **Inspection Catalog**: Pre-seeded database with 120+ common legal defects (ליקויים) for standardized reporting.
-*   **Cloud Ready**: Dockerized application optimized for deployment on **Render** or **Google Cloud Run**.
+*   **Cloud Ready**: Dockerized application optimized for deployment on **Railway**.
 
 ## 🛠️ Tech Stack
 
@@ -75,15 +75,15 @@ npm run dev
 
 The server will start on `http://localhost:8080`.
 
-## 🐳 Deployment (Render)
+## 🚂 Deployment (Railway)
 
-This project is configured for deployment on **Render** using Docker to ensure all system dependencies (like fonts for PDF generation) are present.
+This project is configured for deployment on **Railway** using Docker. Railway automatically detects the `Dockerfile` and builds the environment with the necessary fonts for Puppeteer.
 
 1.  Push your code to GitHub.
-2.  Create a new **Web Service** on Render.
-3.  Connect your repository.
-4.  Select **Docker** as the Runtime.
-5.  Add your Environment Variables (`DATABASE_URL`, `JWT_SECRET`, `GEMINI_API_KEY`, `NODE_ENV=production`).
+2.  Log in to Railway and create a **New Project** > **Deploy from GitHub repo**.
+3.  Select this repository.
+4.  Go to **Variables** and add: `JWT_SECRET`, `GEMINI_API_KEY`, and `NODE_ENV=production`.
+5.  **Database**: You can add a PostgreSQL service within Railway. Railway will automatically inject the `DATABASE_URL` variable into your app service.
 6.  Deploy!
 
 ## 📚 API Documentation
