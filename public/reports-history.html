@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>היסטוריית דו"חות | מערכת רישוי עסקים</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; direction: rtl; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        h1 { margin: 0; font-size: 1.5rem; color: #333; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .nav-links { display: flex; gap: 1.5rem; margin-right: 2rem; }
+        .nav-btn {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background-color: #e2e6ea; border-color: #dae0e5; color: #0056b3; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 1rem 2rem; flex: 1; width: 100%; box-sizing: border-box; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 2rem; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 1rem; }
+        .card-header h2 { margin: 0; font-size: 1.25rem; color: #444; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem; text-align: right; border-bottom: 1px solid #eee; }
+        th { font-weight: 600; color: #555; background-color: #f9f9f9; }
+        tr:hover { background-color: #f5f5f5; }
+        .status-pass { color: green; font-weight: bold; }
+        .status-fail { color: red; font-weight: bold; }
+        .status-conditional { color: orange; font-weight: bold; }
+        .btn-back { background-color: #6c757d; color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 4px; font-size: 0.9rem; }
+        .btn-back:hover { background-color: #5a6268; }
+        .pdf-link { color: #007bff; text-decoration: none; }
+        .pdf-link:hover { text-decoration: underline; }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+            color: #666;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>היסטוריית ביקורות</h1>
+        <div class="user-info">
+            <nav class="nav-links">
+                <a href="dashboard.html" class="nav-btn">לוח בקרה</a>
+                <a href="inspection.html" class="nav-btn">ביקורת חדשה</a>
+            </nav>
+            <span id="user-name"></span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 id="business-title">היסטוריית דו"חות לעסק</h2>
+                <a href="dashboard.html" class="btn-back">חזרה ללוח הבקרה</a>
+            </div>
+            
+            <table id="reports-table">
+                <thead>
+                    <tr>
+                        <th>תאריך ביקורת</th>
+                        <th>שם המפקח</th>
+                        <th>תוצאה</th>
+                        <th>ממצאים (תקציר)</th>
+                        <th>דו"ח PDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="5" style="text-align:center;">טוען נתונים...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 מערכת רישוי עסקים - מועצה אזורית. כל הזכויות שמורות.
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('token');
+        const userStr = localStorage.getItem('user');
+
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                document.getElementById('user-name').textContent = user.fullName;
+            } catch (e) { console.error(e); }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const businessId = urlParams.get('businessId');
+
+        if (!businessId) {
+            alert('שגיאה: לא נבחר עסק.');
+            window.location.href = 'dashboard.html';
+        }
+
+        async function loadReports() {
+            try {
+                // 1. קבלת פרטי העסק (בשביל הכותרת)
+                const bizResponse = await fetch(`/api/businesses/${businessId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (bizResponse.ok) {
+                    const business = await bizResponse.json();
+                    document.getElementById('business-title').textContent = `היסטוריית דו"חות: ${business.businessName}`;
+                }
+
+                // 2. קבלת הדו"חות
+                const reportsResponse = await fetch(`/api/reports/business/${businessId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const tbody = document.querySelector('#reports-table tbody');
+                tbody.innerHTML = '';
+
+                if (!reportsResponse.ok) throw new Error('Failed to fetch reports');
+                
+                const reports = await reportsResponse.json();
+
+                if (reports.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">לא נמצאו ביקורות קודמות לעסק זה.</td></tr>';
+                    return;
+                }
+
+                const statusMap = {
+                    'pass': { text: 'עבר', class: 'status-pass' },
+                    'fail': { text: 'נכשל', class: 'status-fail' },
+                    'conditional_pass': { text: 'עבר בתנאי', class: 'status-conditional' }
+                };
+
+                reports.forEach(report => {
+                    const statusInfo = statusMap[report.status] || { text: report.status, class: '' };
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${new Date(report.visitDate).toLocaleDateString('he-IL', { hour: '2-digit', minute: '2-digit' })}</td>
+                        <td>${report.inspector ? report.inspector.fullName : 'לא ידוע'}</td>
+                        <td class="${statusInfo.class}">${statusInfo.text}</td>
+                        <td>${report.findings.substring(0, 50)}${report.findings.length > 50 ? '...' : ''}</td>
+                        <td>${report.pdfPath ? `<a href="${report.pdfPath}" target="_blank" class="pdf-link">צפה בדו"ח</a>` : '-'}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error(error);
+                document.querySelector('#reports-table tbody').innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">שגיאה בטעינת הנתונים.</td></tr>';
+            }
+        }
+
+        loadReports();
+    </script>
+</body>
+</html>

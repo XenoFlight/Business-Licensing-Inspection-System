@@ -79,13 +79,23 @@
         .link-text a:hover {
             text-decoration: underline;
         }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            background-color: #f0f2f5;
+            color: #666;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
     <div class="login-container">
         <h1>הרשמה למערכת</h1>
-        <form id="register-form" onsubmit="handleRegister(event)">
+        <form id="register-form">
             <div class="input-group">
                 <label for="fullName">שם מלא</label>
                 <input type="text" id="fullName" name="fullName" required>
@@ -113,8 +123,12 @@
         </div>
     </div>
 
+    <footer>
+        &copy; 2026 מערכת רישוי עסקים - מועצה אזורית. כל הזכויות שמורות.
+    </footer>
+
     <script>
-        async function handleRegister(e) {
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const fullName = document.getElementById('fullName').value;
@@ -145,7 +159,7 @@
             } catch (error) {
                 errorMessage.textContent = 'שגיאת תקשורת. נסה שוב מאוחר יותר.';
             }
-        }
+        });
     </script>
 
 </body>

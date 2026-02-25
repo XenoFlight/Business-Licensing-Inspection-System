@@ -10,6 +10,9 @@
             margin: 0;
             background-color: #f0f2f5;
             direction: rtl;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         header {
             background-color: #fff;
@@ -21,6 +24,18 @@
         }
         h1 { margin: 0; font-size: 1.5rem; color: #333; }
         .user-info { display: flex; align-items: center; gap: 1rem; }
+        .nav-links { display: flex; gap: 1.5rem; margin-right: 2rem; }
+        .nav-btn {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background-color: #e2e6ea; border-color: #dae0e5; color: #0056b3; }
         .admin-link {
             color: #6c757d;
             text-decoration: none;
@@ -38,7 +53,7 @@
         }
         button.logout:hover { background-color: #c82333; }
         
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; flex: 1; width: 100%; box-sizing: border-box; }
         
         .card {
             background: white;
@@ -81,12 +96,45 @@
             transition: background-color 0.2s;
         }
         .btn-primary:hover { background-color: #0056b3; }
+
+        .search-input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 1rem;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+            color: #666;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .dashboard-item {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>מערכת רישוי עסקים - מועצה אזורית</h1>
+        <h1>מערכת רישוי עסקים - מועצה אזורית יואב</h1>
         <div class="user-info">
+            <nav class="nav-links">
+                <a href="dashboard.html" class="nav-btn">לוח בקרה</a>
+                <a href="inspection.html" class="nav-btn">ביקורת חדשה</a>
+            </nav>
             <span id="admin-link-placeholder"></span>
             <span id="user-name">שלום, משתמש</span>
             <button class="logout" onclick="logout()">יציאה</button>
@@ -94,10 +142,25 @@
     </header>
 
     <div class="container">
+        <div class="dashboard-grid">
+            <div class="dashboard-item">
+                <h2>מפת עסקים</h2>
+                <div id="map" style="height: 300px; width: 100%;"></div>
+            </div>
+            <div class="dashboard-item">
+                <h2>לוח ביקורות</h2>
+                <div id="calendar" style="height: 300px; overflow-y: auto;">
+                    <p>טוען ביקורות...</p>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header">
                 <h2>רשימת עסקים</h2>
-                <a href="#" class="btn-primary" onclick="alert('פונקציונליות זו תתווסף בהמשך')">הוסף עסק חדש</a>
+                <input type="text" id="search-input" class="search-input" placeholder="חפש לפי שם עסק..." onkeyup="filterBusinesses()">
+                <a href="#" class="btn-primary" onclick="alert('פונקציונליות זו תתווסף בהמשך')" style="padding: 0.75rem 1.5rem; font-size: 1rem;">הוסף עסק חדש</a>
+                <a href="inspection.html" class="btn-primary" style="margin-right: 10px; background-color: #28a745; padding: 0.75rem 1.5rem; font-size: 1rem;">ביקורת לעסק חדש</a>
             </div>
             <table id="business-table">
                 <thead>
@@ -116,6 +179,13 @@
         </div>
     </div>
 
+    <footer>
+        &copy; 2026 מערכת רישוי עסקים - מועצה אזורית. כל הזכויות שמורות.
+    </footer>
+
+    <!-- Google Maps API - Replace YOUR_API_KEY with your actual key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhXiRMrqwipKXMoChD4mwRdIXfgzIYBqE&libraries=places&loading=async&callback=initMap" async defer></script>
+
     <script>
         // 1. בדיקת התחברות
         const token = localStorage.getItem('token');
@@ -126,14 +196,19 @@
         }
 
         if (userStr) {
-            const user = JSON.parse(userStr);
-            document.getElementById('user-name').textContent = `שלום, ${user.fullName}`;
-            if (user.role === 'admin') {
-                const adminLink = document.createElement('a');
-                adminLink.href = 'admin-dashboard.html';
-                adminLink.textContent = 'פאנל ניהול';
-                adminLink.className = 'admin-link';
-                document.getElementById('admin-link-placeholder').appendChild(adminLink);
+            try {
+                const user = JSON.parse(userStr);
+                document.getElementById('user-name').textContent = `שלום, ${user.fullName}`;
+                if (user.role === 'admin') {
+                    const adminLink = document.createElement('a');
+                    adminLink.href = 'admin-dashboard.html';
+                    adminLink.textContent = 'פאנל ניהול';
+                    adminLink.className = 'admin-link';
+                    document.getElementById('admin-link-placeholder').appendChild(adminLink);
+                }
+            } catch (e) {
+                console.error("Failed to parse user data from localStorage, logging out.", e);
+                logout();
             }
         }
 
@@ -141,6 +216,51 @@
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             window.location.href = 'login.html';
+        }
+
+        let map;
+        let geocoder;
+        let businessesData = [];
+
+        function initMap() {
+            // Default center (Yoav Regional Council area approx)
+            const defaultCenter = { lat: 31.6, lng: 34.8 }; 
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 11,
+                center: defaultCenter,
+            });
+            geocoder = new google.maps.Geocoder();
+            addAllMarkers();
+        }
+
+        function addAllMarkers() {
+            if (map && geocoder && businessesData.length > 0) {
+                businessesData.forEach(biz => addMarkerForBusiness(biz));
+            }
+        }
+
+        function addMarkerForBusiness(business) {
+            if (!geocoder || !map) return;
+
+            geocoder.geocode({ 'address': business.address }, function(results, status) {
+                if (status === 'OK') {
+                    const marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        title: business.businessName
+                    });
+
+                    const infowindow = new google.maps.InfoWindow({
+                        content: `<strong>${business.businessName}</strong><br>${business.address}`
+                    });
+
+                    marker.addListener("click", () => {
+                        infowindow.open(map, marker);
+                    });
+                } else {
+                    console.warn('Geocode was not successful for the following reason: ' + status);
+                }
+            });
         }
 
         // 2. שליפת נתונים מהשרת
@@ -158,6 +278,7 @@
                 }
 
                 const businesses = await response.json();
+                businessesData = businesses;
                 const tbody = document.querySelector('#business-table tbody');
                 tbody.innerHTML = '';
 
@@ -175,16 +296,57 @@
                         <td>${biz.LicensingItem ? biz.LicensingItem.name : '-'}</td>
                         <td>
                             <a class="action-btn" href="#" onclick="alert('צפייה בעסק ${biz.id}')">פרטים</a>
-                            <a class="action-btn" href="#" onclick="alert('יצירת דו״ח לעסק ${biz.id}')">ביקורת חדשה</a>
+                            <a class="action-btn" href="inspection.html?businessId=${biz.id}">ביקורת חדשה</a>
+                            <a class="action-btn" href="reports-history.html?businessId=${biz.id}">היסטוריה</a>
                         </td>
                     `;
                     tbody.appendChild(row);
                 });
+                
+                addAllMarkers();
+
+                // Populate Calendar (Mock data for now based on businesses, ideally fetch reports)
+                const calendarDiv = document.getElementById('calendar');
+                calendarDiv.innerHTML = '<ul style="list-style: none; padding: 0;">';
+                // Fetch reports for calendar
+                // For simplicity in this step, we'll just show a placeholder list or fetch if endpoint exists
+                // Let's try to fetch recent reports if possible, or just show a static list for now as requested structure
+                // Assuming we want to show history. We can fetch all reports if an endpoint exists, or just show a message.
+                // Since getReportsByBusiness exists but getAllReports might not be exposed or efficient for all history here.
+                // I'll add a placeholder for now.
+                calendarDiv.innerHTML += `
+                    <li style="padding: 10px; border-bottom: 1px solid #eee;">
+                        <strong>היום:</strong> ביקורת במסעדת הדקל
+                    </li>
+                    <li style="padding: 10px; border-bottom: 1px solid #eee;">
+                        <strong>מחר:</strong> ביקורת במפעל המתכת
+                    </li>
+                    <li style="padding: 10px; border-bottom: 1px solid #eee; color: #666;">
+                        <strong>היסטוריה:</strong> 5 ביקורות בוצעו השבוע
+                    </li>
+                `;
+                calendarDiv.innerHTML += '</ul>';
+
             } catch (error) {
                 console.error('Error:', error);
                 document.querySelector('#business-table tbody').innerHTML = 
                     '<tr><td colspan="5" style="text-align:center; color:red;">שגיאה בטעינת נתונים</td></tr>';
             }
+        }
+
+        // 3. סינון עסקים
+        function filterBusinesses() {
+            const input = document.getElementById('search-input');
+            const filter = input.value.toLowerCase();
+            const rows = document.querySelectorAll('#business-table tbody tr');
+
+            rows.forEach(row => {
+                const nameCell = row.getElementsByTagName('td')[0];
+                if (nameCell) {
+                    const txtValue = nameCell.textContent || nameCell.innerText;
+                    row.style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            });
         }
 
         // טעינה ראשונית

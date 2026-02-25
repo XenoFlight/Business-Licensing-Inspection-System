@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ביקורת חדשה | מערכת רישוי עסקים</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; direction: rtl; }
+        header { background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        h1 { margin: 0; font-size: 1.5rem; color: #333; }
+        .user-info { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+        .nav-links { display: flex; gap: 1.5rem; margin-right: 2rem; }
+        .nav-btn {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background-color: #e2e6ea; border-color: #dae0e5; color: #0056b3; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem 2rem; flex: 1; width: 100%; box-sizing: border-box; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        input[type="text"], textarea, select { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; font-size: 1rem; box-sizing: border-box; }
+        textarea { resize: vertical; min-height: 120px; }
+        .defects-container { border: 1px solid #eee; border-radius: 4px; padding: 1rem; max-height: 250px; overflow-y: auto; background-color: #fafafa; }
+        .defect-item { display: flex; align-items: flex-start; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .defect-item input { margin-left: 0.75rem; margin-top: 0.25rem; }
+        .btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
+        button { padding: 0.75rem 1.5rem; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; font-weight: 500; }
+        .btn-primary { background-color: #007bff; color: white; flex: 1; }
+        .btn-primary:hover { background-color: #0056b3; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        .signature-pad { border: 1px solid #ddd; border-radius: 4px; width: 100%; height: 200px; background-color: #fafafa; touch-action: none; }
+        .business-summary { background-color: #e9ecef; padding: 1rem; border-radius: 4px; margin-bottom: 2rem; border-right: 4px solid #007bff; }
+        .dynamic-list { border: 1px solid #ddd; border-radius: 4px; padding: 10px; background-color: #fafafa; margin-top: 10px; }
+        .dynamic-item { display: flex; flex-direction: column; background: white; padding: 10px; margin-bottom: 10px; border: 1px solid #eee; border-radius: 4px; }
+        .remove-btn { background-color: #dc3545; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; align-self: flex-start; margin-top: 5px; }
+        .add-btn { background-color: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; margin-top: 5px; }
+
+        .regulators-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        .regulators-table th, .regulators-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        .regulators-table th { background-color: #f2f2f2; font-weight: 600; }
+        .regulators-table input[type="text"] { width: 90%; padding: 4px; font-size: 0.85rem; }
+        .signatures-container { display: flex; gap: 20px; flex-wrap: wrap; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 800px; border-radius: 8px; position: relative; }
+        .close-modal { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-modal:hover, .close-modal:focus { color: black; text-decoration: none; cursor: pointer; }
+
+        /* Sticky Footer Setup */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+            color: #666;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        @media (min-width: 992px) {
+            #inspection-form { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .full-width { grid-column: 1 / -1; }
+            .btn-group { grid-column: 1 / -1; }
+            #new-business-form { grid-template-columns: 1fr 1fr; }
+            .signatures-container { grid-column: 1 / -1; }
+            #selected-defects-container { grid-column: 1 / -1; text-align: center; }
+            #regulators-section { grid-column: 1 / -1; }
+            .full-width-desktop { grid-column: 1 / -1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>מערכת רישוי עסקים - מועצה אזורית יואב</h1>
+        <div class="user-info">
+            <nav class="nav-links">
+                <a href="dashboard.html" class="nav-btn">לוח בקרה</a>
+                <a href="inspection.html" class="nav-btn">ביקורת חדשה</a>
+            </nav>
+            <span id="user-name"></span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <!-- תצוגה עבור עסק קיים -->
+            <div id="business-info" class="business-summary" style="display: none;">
+                טוען פרטי עסק...
+            </div>
+
+            <!-- טופס עבור עסק חדש -->
+            <div id="new-business-form" style="display: none; margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1rem; gap: 1rem;">
+                <h2 style="font-size: 1.2rem; margin-bottom: 1rem; grid-column: 1 / -1;">פרטי עסק חדש</h2>
+                <div class="form-group">
+                    <label for="newBusinessName">שם העסק:</label>
+                    <input type="text" id="newBusinessName">
+                </div>
+                <div class="form-group">
+                    <label for="newAddress">כתובת:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="newAddress" onchange="geocodeAddress()" style="flex: 1;">
+                        <button type="button" class="btn-secondary" onclick="openMapModal()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">📍 סמן במפה</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newOwnerName">שם הבעלים:</label>
+                    <input type="text" id="newOwnerName">
+                </div>
+                <div class="form-group">
+                    <label for="newOwnerId">ת.ז. / ח.פ בעלים:</label>
+                    <input type="text" id="newOwnerId">
+                </div>
+                <div class="form-group">
+                    <label for="newContactPhone">טלפון ליצירת קשר:</label>
+                    <input type="text" id="newContactPhone">
+                </div>
+                <div class="form-group">
+                    <label for="newEmail">אימייל (אופציונלי):</label>
+                    <input type="text" id="newEmail">
+                </div>
+                
+                <div class="form-group full-width-desktop">
+                    <label>הוספת פריטי רישוי:</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;" class="full-width">
+                        <select id="licensingCategory" onchange="filterLicensingItems()" style="flex: 1;">
+                            <option value="">בחר קטגוריה...</option>
+                        </select>
+                        <select id="newLicensingItemId" disabled style="flex: 2;">
+                            <option value="">בחר פריט רישוי...</option>
+                        </select>
+                    </div>
+                    <button type="button" id="addItemBtn" class="add-btn" onclick="addLicensingItem()">הוסף פריט רישוי</button>
+                    
+                    <div id="selected-items-container" class="dynamic-list full-width" style="display: none;">
+                        <h3 style="margin-top: 0;">פריטי רישוי שנבחרו</h3>
+                        <div id="selected-items-list"></div>
+                    </div>
+                </div>
+                
+                <div id="regulators-section" class="form-group full-width" style="display: none; margin-top: 1rem;"></div>
+            </div>
+
+            <form id="inspection-form">
+                <input type="hidden" id="businessId" name="businessId">
+
+                <div class="form-group full-width-desktop">
+                    <label>הוספת ליקויים:</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px; width: 100%;" class="full-width">
+                        <select id="defectCategory" style="flex: 1;">
+                            <option value="">בחר קטגוריה...</option>
+                        </select>
+                        <select id="defectSelect" style="flex: 2;" disabled>
+                            <option value="">בחר ליקוי...</option>
+                        </select>
+                    </div>
+                    <button type="button" id="addDefectBtn" class="add-btn">הוסף ליקוי לרשימה</button>
+                    
+                    <div id="selected-defects-container" class="dynamic-list full-width" style="display: none;">
+                        <h3 style="margin-top: 0;">ליקויים שנבחרו</h3>
+                        <div id="selected-defects-list"></div>
+                    </div>
+                    <!-- Hidden input to store selected defects for form submission if needed, though we construct findings manually -->
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="findings">ממצאים ופירוט הליקויים (יופיע בדו"ח):</label>
+                    <textarea id="findings" name="findings" required placeholder="פרט כאן את ממצאי הביקורת..."></textarea>
+                </div>
+
+                <div class="signatures-container">
+                    <div class="form-group" style="flex: 1;">
+                        <label>חתימת המפקח:</label>
+                        <canvas id="inspector-signature-pad" class="signature-pad"></canvas>
+                        <button type="button" id="clearInspectorSignBtn" style="margin-top: 5px; padding: 5px 10px; font-size: 0.8rem;">נקה חתימה</button>
+                    </div>
+    
+                    <div class="form-group" style="flex: 1;">
+                        <label>חתימת בעל העסק:</label>
+                        <canvas id="owner-signature-pad" class="signature-pad"></canvas>
+                        <div style="margin-top: 5px;"><label style="font-weight: normal;"><input type="checkbox" id="ownerRefusedSign"> סירוב חתימה</label></div>
+                        <button type="button" id="clearOwnerSignBtn" style="margin-top: 5px; padding: 5px 10px; font-size: 0.8rem;">נקה חתימה</button>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn-secondary" onclick="window.location.href='dashboard.html'">ביטול</button>
+                    <button type="submit" class="btn-primary">שמור והפק דו"ח</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Map Modal -->
+    <div id="mapModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeMapModal()">&times;</span>
+            <h2>בחר מיקום במפה</h2>
+            <div id="map" style="height: 400px; width: 100%; border: 1px solid #ddd; border-radius: 4px;"></div>
+            <small style="display: block; margin-top: 10px; color: #666;">לחץ על המפה כדי לסמן את המיקום המדויק. הכתובת תתעדכן אוטומטית.</small>
+            <button type="button" class="btn-primary" onclick="closeMapModal()" style="margin-top: 15px;">אישור וסגירה</button>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 מערכת רישוי עסקים - מועצה אזורית. כל הזכויות שמורות.
+    </footer>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhXiRMrqwipKXMoChD4mwRdIXfgzIYBqE&libraries=places&loading=async&callback=initMap" async defer></script>
+
+    <script>
+        const token = localStorage.getItem('token');
+        const userStr = localStorage.getItem('user');
+
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        if (userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                document.getElementById('user-name').textContent = user.fullName;
+            } catch (e) { console.error(e); }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const businessId = urlParams.get('businessId');
+
+        if (businessId) {
+            document.getElementById('businessId').value = businessId;
+            document.getElementById('business-info').style.display = 'block';
+        } else {
+            document.getElementById('new-business-form').style.display = 'grid';
+            document.querySelector('h1').textContent = 'ביקורת לעסק חדש';
+        }
+
+        let allLicensingItems = [];
+        let allDefects = [];
+        let inspectorSignaturePad;
+        let ownerSignaturePad;
+        let selectedDefects = [];
+        let selectedLicensingItems = [];
+        let map;
+        let marker;
+        let geocoder;
+
+        const categoryNames = {
+            "1": "בריאות, רוקחות, קוסמטיקה",
+            "2": "דלק ואנרגיה",
+            "3": "חקלאות, בעלי חיים",
+            "4": "מזון",
+            "5": "מים ופסולת",
+            "6": "מסחר ושונות",
+            "7": "עינוג ציבורי, נופש וספורט",
+            "8": "רכב ותעבורה",
+            "9": "נשק",
+            "10": "תעשייה, מלאכה, כימיה ומחצבים"
+        };
+
+        function openMapModal() {
+            document.getElementById('mapModal').style.display = 'block';
+            // Initialize map if not already done or resize to fit modal
+            if (!map) initMap();
+            else google.maps.event.trigger(map, "resize");
+        }
+
+        function closeMapModal() {
+            document.getElementById('mapModal').style.display = 'none';
+        }
+
+        function initMap() {
+            // Default center (Yoav Regional Council area approx)
+            const defaultCenter = { lat: 31.6, lng: 34.8 }; 
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 11,
+                center: defaultCenter,
+            });
+            geocoder = new google.maps.Geocoder();
+
+            map.addListener("click", (e) => {
+                placeMarkerAndPanTo(e.latLng);
+                geocodeLatLng(e.latLng);
+            });
+        }
+
+        function placeMarkerAndPanTo(latLng) {
+            if (marker) {
+                marker.setPosition(latLng);
+            } else {
+                marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                });
+            }
+            map.panTo(latLng);
+        }
+
+        function geocodeLatLng(latLng) {
+            geocoder.geocode({ location: latLng }, (results, status) => {
+                if (status === "OK" && results[0]) {
+                    document.getElementById("newAddress").value = results[0].formatted_address;
+                } else {
+                    console.warn("Geocoder failed due to: " + status + ". Ensure Geocoding API is enabled.");
+                }
+            });
+        }
+
+        function geocodeAddress() {
+            const address = document.getElementById("newAddress").value;
+            geocoder.geocode({ address: address }, (results, status) => {
+                if (status === "OK") {
+                    placeMarkerAndPanTo(results[0].geometry.location);
+                } else {
+                    console.warn("Geocode was not successful for the following reason: " + status + ". Ensure Geocoding API is enabled in Google Cloud Console.");
+                }
+            });
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('mapModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        async function loadData() {
+            try {
+                // אם יש מזהה עסק, טען את פרטיו
+                if (businessId) {
+                    const bizResponse = await fetch(`/api/businesses/${businessId}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    
+                    if (!bizResponse.ok) throw new Error('Failed to fetch business');
+                    const business = await bizResponse.json();
+
+                    document.getElementById('business-info').innerHTML = `
+                        <strong>שם העסק:</strong> ${business.businessName}<br>
+                        <strong>כתובת:</strong> ${business.address}<br>
+                        <strong>בעלים:</strong> ${business.ownerName}
+                    `;
+                } else {
+                    // אם זה עסק חדש, ננסה לטעון את פריטי הרישוי עבור ה-Dropdown
+                    try {
+                        const itemsResponse = await fetch('/api/licensing-items', {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (itemsResponse.ok) {
+                            allLicensingItems = await itemsResponse.json();
+                            populateLicensingCategories();
+                        }
+                    } catch (err) { console.warn('Could not fetch licensing items', err); }
+                }
+
+                // Fetch Defects Catalog
+                const defectsResponse = await fetch('/api/defects', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!defectsResponse.ok) throw new Error('Failed to fetch defects');
+                allDefects = await defectsResponse.json();
+                
+                populateDefectCategories();
+
+            } catch (error) {
+                console.error(error);
+                alert('שגיאה בטעינת הנתונים. אנא נסה שנית.');
+            }
+        }
+
+        // --- Licensing Items Logic ---
+        function populateLicensingCategories() {
+            // Extract unique categories (first part of item number, e.g., "1" from "1.1")
+            // Or group by some logic. Assuming itemNumber starts with group ID.
+            const categories = new Set();
+            allLicensingItems.forEach(item => {
+                const group = item.itemNumber.split('.')[0];
+                categories.add(group);
+            });
+
+            const catSelect = document.getElementById('licensingCategory');
+            // Sort and add options
+            Array.from(categories).sort((a, b) => parseInt(a) - parseInt(b)).forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.trim();
+                option.textContent = `${cat} - ${categoryNames[cat] || 'כללי'}`;
+                catSelect.appendChild(option);
+            });
+        }
+
+        function filterLicensingItems() {
+            const category = document.getElementById('licensingCategory').value;
+            const itemSelect = document.getElementById('newLicensingItemId');
+            itemSelect.innerHTML = '<option value="">בחר פריט רישוי...</option>';
+            
+            if (!category) {
+                itemSelect.disabled = true;
+                return;
+            }
+
+            const filteredItems = allLicensingItems.filter(item => item.itemNumber.trim().startsWith(category + '.'));
+            filteredItems.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = `${item.itemNumber} - ${item.name}`;
+                itemSelect.appendChild(option);
+            });
+            itemSelect.disabled = false;
+        }
+
+        function addLicensingItem() {
+            const select = document.getElementById('newLicensingItemId');
+            const selectedOption = select.options[select.selectedIndex];
+            
+            if (!select.value) return;
+
+            const itemId = select.value;
+            // Check for duplicates
+            if (selectedLicensingItems.some(i => i.id.toString() === itemId)) return;
+
+            const item = allLicensingItems.find(i => i.id.toString() === itemId);
+            if (item) {
+                selectedLicensingItems.push(item);
+                renderSelectedItems();
+                showRegulatorsTable();
+            }
+            
+            // Reset selection
+            select.value = "";
+        }
+
+        function removeLicensingItem(id) {
+            if (!confirm('האם אתה בטוח שברצונך להסיר פריט זה?')) return;
+            selectedLicensingItems = selectedLicensingItems.filter(i => i.id.toString() !== id.toString());
+            renderSelectedItems();
+            showRegulatorsTable();
+        }
+
+        function renderSelectedItems() {
+            const container = document.getElementById('selected-items-container');
+            const list = document.getElementById('selected-items-list');
+            list.innerHTML = '';
+
+            if (selectedLicensingItems.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'block';
+            selectedLicensingItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'dynamic-item';
+                div.innerHTML = `
+                    <div style="text-align: right;"><strong>${item.itemNumber}</strong> - ${item.name}</div>
+                    <button type="button" class="remove-btn" onclick="removeLicensingItem('${item.id}')">הסר</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function showRegulatorsTable() {
+            const section = document.getElementById('regulators-section');
+            section.innerHTML = ''; // Clear previous tables
+            
+            if (selectedLicensingItems.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            
+            const regulators = [
+                { key: 'needsPoliceApproval', label: 'משטרת ישראל' },
+                { key: 'needsFireDeptApproval', label: 'כבאות והצלה' },
+                { key: 'needsHealthMinistryApproval', label: 'משרד הבריאות' },
+                { key: 'needsEnvironmentalProtectionApproval', label: 'איכות הסביבה' },
+                { key: 'needsAgricultureMinistryApproval', label: 'משרד החקלאות' },
+                { key: 'needsLaborMinistryApproval', label: 'משרד העבודה' }
+            ];
+
+            selectedLicensingItems.forEach(item => {
+                const itemContainer = document.createElement('div');
+                itemContainer.style.marginBottom = '1.5rem';
+                itemContainer.innerHTML = `<h4>גורמי אישור עבור פריט: ${item.itemNumber} - ${item.name}</h4>`;
+
+                const table = document.createElement('table');
+                table.className = 'regulators-table';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>גורם מאשר</th>
+                            <th>אושר</th>
+                            <th>לא אושר</th>
+                            <th>הערות</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+                const tbody = table.querySelector('tbody');
+                let hasRequirements = false;
+
+                regulators.forEach(reg => {
+                    const requirementLevel = item[reg.key]; // 0=No, 1=Yes, 2=Info
+                    if (!requirementLevel) return; // Skip if 0 (not required)
+
+                    hasRequirements = true;
+                    const isInfoOnly = requirementLevel === 2;
+                    const row = document.createElement('tr');
+                    
+                    if (isInfoOnly) {
+                        row.style.backgroundColor = '#e3f2fd'; // Light blue for Info
+                    } else {
+                        row.style.backgroundColor = '#fff';
+                    }
+                    
+                    // Use item ID in input names to distinguish between items
+                    const inputNameSuffix = `${reg.key}_${item.id}`;
+                    
+                    row.innerHTML = `
+                        <td style="text-align: right;">${reg.label} ${isInfoOnly ? '(לידיעה)' : ''}</td>
+                        <td><input type="checkbox" name="reg_approved_${inputNameSuffix}"></td>
+                        <td><input type="checkbox" name="reg_rejected_${inputNameSuffix}"></td>
+                        <td><input type="text" name="reg_notes_${inputNameSuffix}" placeholder="הערות..."></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                if (hasRequirements) {
+                    itemContainer.appendChild(table);
+                    section.appendChild(itemContainer);
+                } else {
+                    itemContainer.innerHTML += '<p>אין גורמי אישור נדרשים לפריט זה.</p>';
+                    section.appendChild(itemContainer);
+                }
+            });
+            section.style.display = 'block';
+        }
+
+        // --- Defects Logic ---
+        function populateDefectCategories() {
+            const categories = new Set(allDefects.map(d => d.category));
+            const catSelect = document.getElementById('defectCategory');
+            
+            Array.from(categories).sort().forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                catSelect.appendChild(option);
+            });
+        }
+
+        function filterDefects() {
+            const category = document.getElementById('defectCategory').value; 
+            const defectSelect = document.getElementById('defectSelect');
+            defectSelect.innerHTML = '<option value="">בחר ליקוי...</option>';
+
+            if (!category) {
+                defectSelect.disabled = true;
+                return;
+            }
+
+            const filtered = allDefects.filter(d => d.category === category);
+            filtered.forEach(defect => {
+                const option = document.createElement('option');
+                option.value = defect.id; // Store ID
+                option.textContent = defect.subject;
+                // Store full description in data attribute for easy access
+                option.setAttribute('data-description', defect.description);
+                defectSelect.appendChild(option);
+            });
+            defectSelect.disabled = false;
+        }
+
+        function addDefect() {
+            const select = document.getElementById('defectSelect');
+            const selectedOption = select.options[select.selectedIndex];
+            
+            if (!select.value) return;
+
+            const defectId = select.value;
+            const defectSubject = selectedOption.text;
+            const defectDesc = selectedOption.getAttribute('data-description');
+
+            // Prevent duplicates
+            if (selectedDefects.some(d => d.id === defectId)) return;
+
+            selectedDefects.push({ id: defectId, subject: defectSubject, description: defectDesc, notes: '' });
+            renderSelectedDefects();
+            updateFindingsText();
+            
+            // Reset selection
+            select.value = "";
+        }
+
+        function updateFindingsText() {
+            const findings = document.getElementById('findings');
+            if (selectedDefects.length > 0) {
+                const text = selectedDefects.map(d => {
+                    const noteText = d.notes ? `\n  הערות: ${d.notes}` : '';
+                    return `- ${d.subject}: ${d.description}${noteText}`;
+                }).join('\n\n');
+                findings.value = text;
+            } else {
+                // Only clear if empty to allow manual edits if user wants, 
+                // but here we overwrite based on list. 
+                // If you want to preserve manual edits, logic needs to be more complex.
+                // For now, list drives the text area.
+                findings.value = "";
+            }
+        }
+
+        function removeDefect(id) {
+            if (!confirm('האם אתה בטוח שברצונך להסיר ליקוי זה?')) return;
+            selectedDefects = selectedDefects.filter(d => d.id !== id.toString());
+            renderSelectedDefects();
+            updateFindingsText();
+        }
+
+        function updateDefectNotes(id, value) {
+            const defect = selectedDefects.find(d => d.id === id.toString());
+            if (defect) {
+                defect.notes = value;
+                updateFindingsText();
+            }
+        }
+
+        function renderSelectedDefects() {
+            const container = document.getElementById('selected-defects-container');
+            const list = document.getElementById('selected-defects-list');
+            list.innerHTML = '';
+
+            if (selectedDefects.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            container.style.display = 'block';
+            selectedDefects.forEach(defect => {
+                const div = document.createElement('div');
+                div.className = 'dynamic-item';
+                div.innerHTML = `
+                    <div style="text-align: right; margin-bottom: 5px;"><strong>${defect.subject}</strong>: ${defect.description}</div>
+                    <textarea placeholder="הוסף הערות חופשיות לליקוי זה..." style="width: 100%; min-height: 60px; margin-bottom: 5px;" 
+                        oninput="updateDefectNotes('${defect.id}', this.value)">${defect.notes || ''}</textarea>
+                    <div style="text-align: left;">
+                        <button type="button" class="remove-btn" data-id="${defect.id}">הסר</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        // --- Signature Logic ---
+        function initSignaturePad(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+
+            // Resize canvas to fit container
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = canvas.clientWidth * ratio;
+                canvas.height = canvas.clientHeight * ratio;
+                ctx.scale(ratio, ratio);
+            }
+            window.addEventListener("resize", resizeCanvas);
+            resizeCanvas();
+
+            function startPosition(e) {
+                isDrawing = true;
+                draw(e);
+            }
+            function endPosition() {
+                isDrawing = false;
+                ctx.beginPath();
+            }
+            function draw(e) {
+                if (!isDrawing) return;
+                e.preventDefault(); // Prevent scrolling on touch
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const y = (e.clientY || e.touches[0].clientY) - rect.top;
+                
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            }
+
+            canvas.addEventListener('mousedown', startPosition);
+            canvas.addEventListener('mouseup', endPosition);
+            canvas.addEventListener('mousemove', draw);
+            
+            canvas.addEventListener('touchstart', startPosition);
+            canvas.addEventListener('touchend', endPosition);
+            canvas.addEventListener('touchmove', draw);
+        }
+
+        function clearSignature(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function toggleOwnerSignature() {
+            const isRefused = document.getElementById('ownerRefusedSign').checked;
+            const canvas = document.getElementById('owner-signature-pad');
+            const btn = document.getElementById('clearOwnerSignBtn');
+            
+            if (isRefused) {
+                canvas.style.display = 'none';
+                btn.style.display = 'none';
+            } else {
+                canvas.style.display = 'block';
+                btn.style.display = 'inline-block';
+                // Re-init to ensure context is correct if hidden previously
+                initSignaturePad('owner-signature-pad');
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('defectCategory').addEventListener('change', filterDefects);
+        document.getElementById('addDefectBtn').addEventListener('click', addDefect);
+        document.getElementById('clearInspectorSignBtn').addEventListener('click', () => clearSignature('inspector-signature-pad'));
+        document.getElementById('clearOwnerSignBtn').addEventListener('click', () => clearSignature('owner-signature-pad'));
+        document.getElementById('ownerRefusedSign').addEventListener('change', toggleOwnerSignature);
+
+        // Delegate event for dynamic remove buttons
+        document.getElementById('selected-defects-list').addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('remove-btn')) {
+                const id = e.target.getAttribute('data-id');
+                removeDefect(id);
+            }
+        });
+
+        document.getElementById('inspection-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'מעבד נתונים...';
+
+            const currentBusinessId = document.getElementById('businessId').value;
+            const ownerRefused = document.getElementById('ownerRefusedSign').checked;
+            
+            // Collect regulator data if new business
+            let regulatorsData = {};
+            if (!currentBusinessId) {
+                const regulators = [
+                    'needsPoliceApproval', 'needsFireDeptApproval', 'needsHealthMinistryApproval', 
+                    'needsEnvironmentalProtectionApproval', 'needsAgricultureMinistryApproval', 'needsLaborMinistryApproval'
+                ];
+                
+                selectedLicensingItems.forEach(item => {
+                    regulators.forEach(key => {
+                        const inputNameSuffix = `${key}_${item.id}`;
+                        const approved = document.querySelector(`input[name="reg_approved_${inputNameSuffix}"]`)?.checked;
+                        const rejected = document.querySelector(`input[name="reg_rejected_${inputNameSuffix}"]`)?.checked;
+                        const notes = document.querySelector(`input[name="reg_notes_${inputNameSuffix}"]`)?.value;
+                        
+                        if (approved || rejected || notes) {
+                            // Store with item ID to keep unique if needed, or aggregate. 
+                            // For simplicity, using a composite key or array structure would be better in DB, 
+                            // but here we just map it to a flat object key for now.
+                            regulatorsData[`${key}_${item.id}`] = { itemId: item.id, approved, rejected, notes };
+                        }
+                    });
+                });
+            }
+
+            const formData = {
+                businessId: currentBusinessId,
+                findings: document.getElementById('findings').value,
+                status: 'fail', // Default status since dropdown removed, logic can be improved
+                inspectorSignature: document.getElementById('inspector-signature-pad').toDataURL(),
+                ownerSignature: ownerRefused ? 'REFUSED' : document.getElementById('owner-signature-pad').toDataURL(),
+                ownerRefusedSign: ownerRefused,
+                regulatorsData: Object.keys(regulatorsData).length ? regulatorsData : undefined
+            };
+
+            // אם אין מזהה עסק, אסוף את נתוני העסק החדש
+            if (!currentBusinessId) {
+                formData.businessData = {
+                    businessName: document.getElementById('newBusinessName').value,
+                    address: document.getElementById('newAddress').value,
+                    ownerName: document.getElementById('newOwnerName').value,
+                    ownerId: document.getElementById('newOwnerId').value,
+                    contactPhone: document.getElementById('newContactPhone').value,
+                    email: document.getElementById('newEmail').value,
+                    // Send array of IDs or primary ID. Assuming backend handles one for now, 
+                    // or we need to update backend to handle multiple. 
+                    // For now, sending the first one as primary if multiple not supported by DB schema yet.
+                    licensingItemId: selectedLicensingItems.length > 0 ? selectedLicensingItems[0].id : null
+                };
+                
+                if (!formData.businessData.businessName || selectedLicensingItems.length === 0) {
+                    alert('יש למלא את כל שדות החובה של העסק (שם עסק, לפחות פריט רישוי אחד וכו\')');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch('/api/reports', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert('הדו"ח נוצר בהצלחה!');
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('שגיאה: ' + (result.message || 'אירעה שגיאה ביצירת הדו"ח'));
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            } catch (error) {
+                console.error(error);
+                alert('שגיאת תקשורת');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        loadData();
+        // Init signature pads after load to ensure dimensions are correct
+        setTimeout(() => {
+            initSignaturePad('inspector-signature-pad');
+            initSignaturePad('owner-signature-pad');
+        }, 100);
+    </script>
+</body>
+</html>

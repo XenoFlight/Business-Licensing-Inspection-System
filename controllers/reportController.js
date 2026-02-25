@@ -17,8 +17,22 @@ const genAI = process.env.GEMINI_API_KEY
 // @access  Private (Inspector)
 exports.createReport = async (req, res) => {
   try {
-    const { businessId, findings, status } = req.body;
+    let { businessId, findings, status, businessData } = req.body;
     const inspectorId = req.user.id; // נלקח מהטוקן
+
+    // אם לא סופק מזהה עסק, אך סופקו פרטי עסק חדש - ניצור אותו
+    // If no businessId but businessData provided - create the business
+    if (!businessId && businessData) {
+      try {
+        const newBusiness = await Business.create({
+          ...businessData,
+          status: 'application_submitted' // סטטוס התחלתי
+        });
+        businessId = newBusiness.id;
+      } catch (bizError) {
+        return res.status(400).json({ message: 'שגיאה ביצירת עסק חדש', error: bizError.message });
+      }
+    }
 
     // בדיקה שהעסק קיים
     const business = await Business.findByPk(businessId);

@@ -18,7 +18,17 @@ app.set('trust proxy', 1);
 
 // הגדרות אבטחה ולוגים
 // Security and Logging configurations
-app.use(helmet()); // הגנה על כותרות HTTP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://maps.googleapis.com", "https://maps.gstatic.com"],
+      "img-src": ["'self'", "data:", "https://maps.googleapis.com", "https://maps.gstatic.com"],
+      "script-src-attr": ["'self'", "'unsafe-inline'"],
+      "connect-src": ["'self'", "https://maps.googleapis.com"],
+    },
+  },
+})); // הגנה על כותרות HTTP
 app.use(cors()); // אפשור Cross-Origin Resource Sharing
 app.use(morgan('dev')); // הדפסת לוגים של בקשות לקונסול
 

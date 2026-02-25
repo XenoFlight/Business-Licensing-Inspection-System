@@ -30,29 +30,34 @@ const LicensingItem = sequelize.define('LicensingItem', {
   },
   // גורמי אישור נדרשים (Approval Bodies)
   needsPoliceApproval: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
     comment: 'האם נדרש אישור משטרה' // Police Approval Required
   },
   needsFireDeptApproval: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true, // לרוב נדרש
+    type: DataTypes.INTEGER,
+    defaultValue: 1, // לרוב נדרש
     comment: 'האם נדרש אישור כבאות' // Fire Dept Approval Required
   },
   needsHealthMinistryApproval: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
     comment: 'האם נדרש אישור משרד הבריאות' // Health Ministry Approval Required
   },
   needsEnvironmentalProtectionApproval: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
     comment: 'האם נדרש אישור המשרד להגנת הסביבה' // Environmental Protection Approval Required
   },
   needsAgricultureMinistryApproval: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
     comment: 'האם נדרש אישור משרד החקלאות' // Agriculture Ministry Approval Required
+  },
+  needsLaborMinistryApproval: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    comment: 'האם נדרש אישור משרד העבודה' // Labor Ministry Approval Required
   },
   validityYears: {
     type: DataTypes.INTEGER,

@@ -71,12 +71,14 @@ exports.login = async (req, res) => {
       }
 
       res.json({
-        _id: user.id,
-        fullName: user.fullName,
-        email: user.email,
-        role: user.role,
         token: generateToken(user.id),
-        message: 'התחברות בוצעה בהצלחה'
+        user: {
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role
+        },
+        message: 'התחברות בוצעה בהצלחה',
       });
     } else {
       res.status(401).json({ message: 'אימייל או סיסמה שגויים' });
