@@ -12,7 +12,6 @@ const LicensingItem = sequelize.define('LicensingItem', {
   itemNumber: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
     comment: 'מספר פריט רישוי (לדוגמה: 4.2א)' // Licensing Item Number (e.g., 4.2a)
   },
   name: {
@@ -28,7 +27,6 @@ const LicensingItem = sequelize.define('LicensingItem', {
   licensingTrack: {
     type: DataTypes.ENUM('regular', 'expedited_a', 'expedited_b', 'affidavit'),
     defaultValue: 'regular',
-    comment: 'מסלול רישוי: רגיל, מזורז א, מזורז ב, או תצהיר' // Licensing Track
   },
   // גורמי אישור נדרשים (Approval Bodies)
   needsPoliceApproval: {
@@ -63,7 +61,13 @@ const LicensingItem = sequelize.define('LicensingItem', {
   }
 }, {
   tableName: 'licensing_items',
-  timestamps: false // טבלה סטטית יחסית
+  timestamps: false, // טבלה סטטית יחסית
+  indexes: [
+    {
+      unique: true,
+      fields: ['itemNumber']
+    }
+  ]
 });
 
 module.exports = LicensingItem;

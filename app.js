@@ -2,10 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 const authRoutes = require('./routes/authRoutes');
 const licensingRoutes = require('./routes/licensingRoutes');
 const businessRoutes = require('./routes/businessRoutes');
 const defectRoutes = require('./routes/defectRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 // אתחול האפליקציה
 // Initialize App
@@ -25,6 +27,10 @@ app.use(morgan('dev')); // הדפסת לוגים של בקשות לקונסול
 app.use(express.json()); // עבור JSON
 app.use(express.urlencoded({ extended: true })); // עבור Form Data
 
+// הגדרת תיקייה סטטית לקבצים ציבוריים (HTML, CSS, וכו')
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 // נתיב בדיקה (Health Check)
 app.get('/', (req, res) => {
   res.status(200).json({
@@ -40,6 +46,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/licensing-items', licensingRoutes);
 app.use('/api/businesses', businessRoutes);
 app.use('/api/defects', defectRoutes);
+app.use('/api/admin', adminRoutes);
 
 // טיפול בשגיאות 404 (נתיב לא נמצא)
 // 404 Error Handling

@@ -44,14 +44,12 @@ const Business = sequelize.define('Business', {
   },
   licenseNumber: {
     type: DataTypes.STRING,
-    unique: true,
     allowNull: true,
     comment: 'מספר רישיון עסק (אם הונפק)' // Business License Number (if issued)
   },
   status: {
     type: DataTypes.ENUM('application_submitted', 'in_process', 'active', 'expired', 'revoked', 'closed'),
     defaultValue: 'application_submitted',
-    comment: 'סטטוס רישיון: הוגשה בקשה, בתהליך, פעיל, פג תוקף, בוטל, נסגר' // License Status
   },
   issueDate: {
     type: DataTypes.DATEONLY,
@@ -70,7 +68,13 @@ const Business = sequelize.define('Business', {
   }
 }, {
   tableName: 'businesses',
-  timestamps: true // מוסיף createdAt ו-updatedAt
+  timestamps: true, // מוסיף createdAt ו-updatedAt
+  indexes: [
+    {
+      unique: true,
+      fields: ['licenseNumber']
+    }
+  ]
 });
 
 module.exports = Business;

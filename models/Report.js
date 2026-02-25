@@ -33,7 +33,6 @@ const Report = sequelize.define('Report', {
   status: {
     type: DataTypes.ENUM('pass', 'fail', 'conditional_pass'),
     defaultValue: 'fail',
-    comment: 'תוצאת הביקורת: עבר, נכשל, עבר בתנאי' // Inspection Status
   },
   aiRiskAssessment: {
     type: DataTypes.JSON, // PostgreSQL תומך ב-JSON

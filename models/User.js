@@ -18,7 +18,6 @@ const User = sequelize.define('User', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
     validate: {
       isEmail: true
     },
@@ -32,8 +31,7 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.ENUM('inspector', 'manager', 'admin'),
     defaultValue: 'inspector',
-    allowNull: false,
-    comment: 'תפקיד: מפקח, מנהל, או אדמין' // Role: Inspector, Manager, Admin
+    allowNull: false
   },
   phoneNumber: {
     type: DataTypes.STRING,
@@ -44,10 +42,21 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
     comment: 'האם המשתמש פעיל במערכת' // Is active
+  },
+  isApproved: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    comment: 'האם המשתמש אושר על ידי מנהל' // Is approved by admin
   }
 }, {
   tableName: 'users',
-  timestamps: true // מוסיף אוטומטית createdAt ו-updatedAt
+  timestamps: true, // מוסיף אוטומטית createdAt ו-updatedAt
+  indexes: [
+    {
+      unique: true,
+      fields: ['email']
+    }
+  ]
 });
 
 // הצפנת סיסמה לפני שמירה במסד הנתונים (Hook)

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>כניסה למערכת | רישוי עסקים</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            direction: rtl;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
+            text-align: right;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #error-message {
+            color: red;
+            margin-top: 1rem;
+            min-height: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>כניסה למערכת</h1>
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <label for="email">דואר אלקטרוני</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">סיסמה</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">כניסה</button>
+        </form>
+        <p id="error-message"></p>
+        <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #666;">
+            אין לך חשבון? <a href="register.html" style="color: #007bff; text-decoration: none;">הירשם כאן</a>
+        </div>
+    </div>
+
+    <script>
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
+            
+            errorMessage.textContent = '';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user)); // שמירת פרטי משתמש אם יש
+                    window.location.href = 'dashboard.html';
+                } else {
+                    errorMessage.textContent = data.message || 'שגיאה בכניסה למערכת';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'שגיאת תקשורת. נסה שוב מאוחר יותר.';
+            }
+        }
+    </script>
+
+</body>
+</html>
