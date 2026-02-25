@@ -1,0 +1,65 @@
+const { Sequelize } = require('sequelize');
+require('dotenv').config();
+
+// הגדרת משתני חיבור למסד הנתונים
+// Database connection variables
+let sequelize;
+
+// בדיקה האם קיימת מחרוזת חיבור מלאה (למשל Neon DB)
+// Check if a full connection string is provided (e.g. Neon DB)
+if (process.env.DATABASE_URL) {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false // נדרש לרוב ספקי הענן כמו Neon
+      }
+    },
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    },
+    // הגדרת אזור זמן לישראל
+    timezone: '+02:00' 
+  });
+} else {
+  // חיבור TCP רגיל עבור פיתוח מקומי
+  // Standard TCP connection for Local Development
+  sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
+    {
+      host: process.env.DB_HOST,
+      dialect: 'postgres',
+      port: process.env.DB_PORT || 5432,
+      logging: console.log, // הצגת שאילתות בקונסול לצורך דיבאגינג
+      pool: {
+        max: 5,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+      }
+    }
+  );
+}
+
+// פונקציה לבדיקת החיבור
+// Function to test the connection
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('✅ החיבור למסד הנתונים (PostgreSQL) בוצע בהצלחה.');
+    console.log('✅ Database connection established successfully.');
+  } catch (error) {
+    console.error('❌ שגיאה בהתחברות למסד הנתונים:', error);
+    console.error('❌ Unable to connect to the database:', error);
+    process.exit(1); // עצירת השרת במקרה של כשל קריטי
+  }
+};
+
+module.exports = { sequelize, connectDB };
