@@ -31,6 +31,11 @@ if (process.env.DATABASE_URL) {
     timezone: '+02:00' 
   });
 } else {
+  // אם רצים בסביבת ייצור וחסרה מחרוזת החיבור - זרוק שגיאה ברורה
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('FATAL ERROR: DATABASE_URL environment variable is not set in production.');
+  }
+
   // חיבור TCP רגיל עבור פיתוח מקומי
   // Standard TCP connection for Local Development
   sequelize = new Sequelize(
