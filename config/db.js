@@ -33,6 +33,11 @@ if (process.env.DATABASE_URL) {
 } else {
   // אם רצים בסביבת ייצור וחסרה מחרוזת החיבור - זרוק שגיאה ברורה
   if (process.env.NODE_ENV === 'production') {
+    console.error('❌ Environment Variables Debug:', {
+      NODE_ENV: process.env.NODE_ENV,
+      HAS_DB_URL: !!process.env.DATABASE_URL,
+      AVAILABLE_KEYS: Object.keys(process.env)
+    });
     throw new Error('FATAL ERROR: DATABASE_URL environment variable is not set in production.');
   }
 
