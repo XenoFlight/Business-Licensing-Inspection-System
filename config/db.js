@@ -3,7 +3,7 @@ const path = require('path');
 
 // טעינת משתני סביבה - מנסה לטעון מהתיקייה הנוכחית (config) אם הקובץ שם
 // Load environment variables from the current directory (config) if present
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 // הגדרת משתני חיבור למסד הנתונים
 // Database connection variables
