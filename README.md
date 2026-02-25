@@ -60,9 +60,10 @@ A comprehensive backend system for managing business licensing and on-site inspe
     ```
 
 4.  **Seed the Database:**
-    Populate the database with the catalog of inspection defects:
+    Populate the database with the catalog of inspection defects and licensing items:
     ```bash
     node utils/seedDefects.js
+    node utils/seedSystem.js
     ```
 
 ## 🏃‍♂️ Running Locally
@@ -114,5 +115,5 @@ This project is configured for deployment on **Railway** using Docker. Railway a
 ISC License.
 
 ---
-**Developed for the Regional Council Dev Team.**"# Business-Licensing-Inspection-System" 
+**Developed for the Regional Council Dev Team.**
 "# Business-Licensing-Inspection-System" 
