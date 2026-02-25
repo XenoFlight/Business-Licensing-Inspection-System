@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>פאנל ניהול | מערכת רישוי עסקים</title>
     <style>
+<<<<<<< HEAD
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; direction: rtl; display: flex; flex-direction: column; min-height: 100vh; }
         header { background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
         h1 { margin: 0; font-size: 1.5rem; color: #333; }
@@ -21,11 +22,21 @@
             transition: all 0.2s;
         }
         .nav-btn:hover { background-color: #e2e6ea; border-color: #dae0e5; color: #0056b3; }
+=======
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; direction: rtl; }
+        header { background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        h1 { margin: 0; font-size: 1.5rem; color: #333; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+>>>>>>> f5cdb198164109e3d6e9e2752924e5d48967a64a
         .user-info a { color: #007bff; text-decoration: none; font-weight: 500; }
         .user-info a:hover { text-decoration: underline; }
         button.logout { background-color: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
         button.logout:hover { background-color: #c82333; }
+<<<<<<< HEAD
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; flex: 1; width: 100%; box-sizing: border-box; }
+=======
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+>>>>>>> f5cdb198164109e3d6e9e2752924e5d48967a64a
         .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 1.5rem; margin-bottom: 2rem; }
         .card-header { border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1rem; }
         .card-header h2 { margin: 0; font-size: 1.25rem; color: #444; }
@@ -38,6 +49,7 @@
         .approve-btn:disabled { background-color: #6c757d; cursor: not-allowed; }
         .deny-btn { background-color: #dc3545; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: background-color 0.2s; margin-right: 0.5rem; }
         .deny-btn:hover { background-color: #c82333; }
+<<<<<<< HEAD
         footer {
             text-align: center;
             padding: 1rem;
@@ -48,16 +60,22 @@
             font-size: 0.9rem;
             width: 100%;
         }
+=======
+>>>>>>> f5cdb198164109e3d6e9e2752924e5d48967a64a
     </style>
 </head>
 <body>
     <header>
         <h1>פאנל ניהול</h1>
         <div class="user-info">
+<<<<<<< HEAD
             <nav class="nav-links">
                 <a href="dashboard.html" class="nav-btn">לוח בקרה</a>
                 <a href="inspection.html" class="nav-btn">ביקורת חדשה</a>
             </nav>
+=======
+            <a href="dashboard.html">לוח בקרה ראשי</a>
+>>>>>>> f5cdb198164109e3d6e9e2752924e5d48967a64a
             <span id="user-name"></span>
             <button class="logout" onclick="logout()">יציאה</button>
         </div>
@@ -85,10 +103,13 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <footer>
         &copy; 2026 מערכת רישוי עסקים - מועצה אזורית. כל הזכויות שמורות.
     </footer>
 
+=======
+>>>>>>> f5cdb198164109e3d6e9e2752924e5d48967a64a
     <script>
         const token = localStorage.getItem('token');
         const userStr = localStorage.getItem('user');
