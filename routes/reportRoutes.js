@@ -4,7 +4,8 @@ const {
   createReport,
   getReportsByBusiness,
   getReportById,
-  updateReport
+  updateReport,
+  getAllReports
 } = require('../controllers/reportController');
 const { protect, authorize } = require('../middlewares/authMiddleware');
 
@@ -12,7 +13,8 @@ const { protect, authorize } = require('../middlewares/authMiddleware');
 // Report Routes
 
 router.route('/')
-  .post(protect, authorize('inspector', 'manager', 'admin'), createReport); // יצירת דו"ח
+  .post(protect, authorize('inspector', 'manager', 'admin'), createReport) // יצירת דו"ח
+  .get(protect, authorize('inspector', 'manager', 'admin'), getAllReports); // קבלת כל הדו"חות (לוח ביקורות)
 
 router.route('/business/:businessId')
   .get(protect, getReportsByBusiness); // קבלת היסטוריית דו"חות לעסק

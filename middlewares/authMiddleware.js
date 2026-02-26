@@ -30,15 +30,15 @@ exports.protect = async (req, res, next) => {
         return res.status(401).json({ message: 'המשתמש לא נמצא, ההרשאה נדחתה' });
       }
 
-      next();
+      return next();
     } catch (error) {
       console.error('Auth Error:', error.message);
-      res.status(401).json({ message: 'לא מורשה, טוקן לא תקין' });
+      return res.status(401).json({ message: 'לא מורשה, טוקן לא תקין' });
     }
   }
 
   if (!token) {
-    res.status(401).json({ message: 'לא מורשה, לא התקבל טוקן' });
+    return res.status(401).json({ message: 'לא מורשה, לא התקבל טוקן' });
   }
 };
 
@@ -46,6 +46,9 @@ exports.protect = async (req, res, next) => {
 // Grant access to specific roles
 exports.authorize = (...roles) => {
   return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'לא מורשה, משתמש לא מזוהה' });
+    }
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         message: `תפקיד המשתמש (${req.user.role}) אינו מורשה לבצע פעולה זו`

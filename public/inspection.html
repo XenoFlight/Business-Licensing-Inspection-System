@@ -220,10 +220,21 @@
         &copy; 2026 מערכת רישוי עסקים - מועצה אזורית. כל הזכויות שמורות.
     </footer>
 
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhXiRMrqwipKXMoChD4mwRdIXfgzIYBqE&libraries=places&loading=async&callback=initMap" async defer></script>
+    <!-- Google Maps API loaded dynamically below -->
 
     <script>
+        // Fetch API Key from server and load Google Maps
+        fetch('/api/config/google-maps')
+            .then(response => response.json())
+            .then(data => {
+                const script = document.createElement('script');
+                script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places&loading=async&callback=initMap`;
+                script.async = true;
+                script.defer = true;
+                document.head.appendChild(script);
+            })
+            .catch(err => console.error('Error loading Google Maps API:', err));
+
         const token = localStorage.getItem('token');
         const userStr = localStorage.getItem('user');
 

@@ -152,6 +152,25 @@ exports.getReportsByBusiness = async (req, res) => {
   }
 };
 
+// @desc    קבלת כל הדו"חות (לוח ביקורות)
+// @route   GET /api/reports
+// @access  Private (Inspector/Manager/Admin)
+exports.getAllReports = async (req, res) => {
+  try {
+    const reports = await Report.findAll({
+      include: [
+        { model: Business, attributes: ['id', 'businessName', 'address'] },
+        { model: User, as: 'inspector', attributes: ['fullName'] }
+      ],
+      order: [['visitDate', 'DESC']]
+    });
+    res.json(reports);
+  } catch (error) {
+    console.error('Error fetching all reports:', error);
+    res.status(500).json({ message: 'שגיאת שרת בקבלת כל הדו"חות', error: error.message });
+  }
+};
+
 // @desc    קבלת דו"ח לפי מזהה
 // @route   GET /api/reports/:id
 // @access  Private
