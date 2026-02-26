@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ביקורת חדשה | מערכת רישוי עסקים</title>
+    <link rel="stylesheet" href="/tailwind.min.css">
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; direction: rtl; }
         header { background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
@@ -84,15 +85,15 @@
         }
     </style>
 </head>
-<body>
-    <header>
-        <h1>מערכת רישוי עסקים - מועצה אזורית יואב</h1>
-        <div class="user-info">
-            <nav class="nav-links">
-                <a href="dashboard.html" class="nav-btn">לוח בקרה</a>
-                <a href="inspection.html" class="nav-btn">ביקורת חדשה</a>
+<body class="bg-gray-100 min-h-screen flex flex-col" dir="rtl">
+    <header class="bg-white shadow-md px-6 py-3 flex justify-between items-center mb-8">
+        <h1 class="text-xl font-bold text-gray-800">מערכת רישוי עסקים - מועצה אזורית יואב</h1>
+        <div class="flex items-center gap-4">
+            <nav class="flex gap-3">
+                <a href="dashboard.html" class="px-4 py-2 bg-gray-100 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">לוח בקרה</a>
+                <a href="inspection.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">ביקורת חדשה</a>
             </nav>
-            <span id="user-name"></span>
+            <span id="user-name" class="text-gray-700 text-sm font-medium"></span>
         </div>
     </header>
 
