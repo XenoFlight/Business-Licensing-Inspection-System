@@ -4,212 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>לוח בקרה | מערכת רישוי עסקים</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            background-color: #f0f2f5;
-            direction: rtl;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        header {
-            background-color: #fff;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        h1 { margin: 0; font-size: 1.5rem; color: #333; }
-        .user-info { display: flex; align-items: center; gap: 1rem; }
-        .nav-links { display: flex; gap: 1.5rem; margin-right: 2rem; }
-        .nav-btn {
-            text-decoration: none;
-            color: #333;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            background-color: #f8f9fa;
-            border: 1px solid #ddd;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .nav-btn:hover { background-color: #e2e6ea; border-color: #dae0e5; color: #0056b3; }
-        .admin-link {
-            color: #6c757d;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .admin-link:hover { text-decoration: underline; }
-        button.logout {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        button.logout:hover { background-color: #c82333; }
-        
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; flex: 1; width: 100%; box-sizing: border-box; }
-        
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
-        }
-        .card-header h2 { margin: 0; font-size: 1.25rem; color: #444; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { padding: 0.75rem; text-align: right; border-bottom: 1px solid #eee; }
-        th { font-weight: 600; color: #555; background-color: #f9f9f9; }
-        tr:hover { background-color: #f5f5f5; }
-        
-        .action-btn {
-            text-decoration: none;
-            color: #007bff;
-            font-size: 0.9rem;
-            margin-left: 0.5rem;
-            cursor: pointer;
-        }
-        .action-btn:hover { text-decoration: underline; }
-        
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            transition: background-color 0.2s;
-        }
-        .btn-primary:hover { background-color: #0056b3; }
-
-        .search-input {
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-right: 1rem;
-        }
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: #fff;
-            border-top: 1px solid #eee;
-            margin-top: auto;
-            color: #666;
-            font-size: 0.9rem;
-            width: 100%;
-        }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        .dashboard-item {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            padding: 1.5rem;
-        }
-    </style>
+    <link rel="stylesheet" href="/tailwind.min.css">
 </head>
-<body>
-    <header>
-        <h1>מערכת רישוי עסקים - מועצה אזורית יואב</h1>
-        <div class="user-info">
-            <nav class="nav-links">
-                <a href="dashboard.html" class="nav-btn">לוח בקרה</a>
-                <a href="inspection.html" class="nav-btn">ביקורת חדשה</a>
+<body class="bg-gray-100 min-h-screen flex flex-col" dir="rtl">
+
+    <header class="bg-white shadow-md px-6 py-3 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-gray-800">מערכת רישוי עסקים - מועצה אזורית יואב</h1>
+        <div class="flex items-center gap-4">
+            <nav class="flex gap-3">
+                <a href="dashboard.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">לוח בקרה</a>
+                <a href="inspection.html" class="px-4 py-2 bg-gray-100 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors">ביקורת חדשה</a>
             </nav>
             <span id="admin-link-placeholder"></span>
-            <span id="user-name">שלום, משתמש</span>
-            <button class="logout" onclick="logout()">יציאה</button>
+            <span id="user-name" class="text-gray-700 text-sm font-medium">שלום, משתמש</span>
+            <button onclick="logout()" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 transition-colors">יציאה</button>
         </div>
     </header>
 
-    <div class="container">
-        <div class="dashboard-grid">
-            <div class="dashboard-item">
-                <h2>מפת עסקים</h2>
-                <div id="map" style="height: 300px; width: 100%;"></div>
-            </div>
-            <div class="dashboard-item">
-                <h2>לוח ביקורות</h2>
-                <div id="calendar" style="height: 300px; overflow-y: auto;">
-                    <p>טוען ביקורות...</p>
+    <div class="container mx-auto px-4 py-8 flex-1 w-full max-w-7xl" style="box-sizing:border-box;">
+
+        <!-- Inspection Board Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">לוח ביקורות ופיקוח</h2>
+            <div class="flex items-center gap-4">
+                <button id="toggle-map-btn" onclick="toggleMap()"
+                    class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                    </svg>
+                    <span id="map-btn-text">חיפוש במפה</span>
+                </button>
+                <div class="relative">
+                    <input type="text" id="report-search" placeholder="חפש לפי שם עסק או מפקח..."
+                        class="border border-gray-300 rounded-lg py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                        oninput="filterReports()">
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h2>רשימת עסקים</h2>
-                <input type="text" id="search-input" class="search-input" placeholder="חפש לפי שם עסק..." onkeyup="filterBusinesses()">
-                <a href="#" class="btn-primary" onclick="alert('פונקציונליות זו תתווסף בהמשך')" style="padding: 0.75rem 1.5rem; font-size: 1rem;">הוסף עסק חדש</a>
-                <a href="inspection.html" class="btn-primary" style="margin-right: 10px; background-color: #28a745; padding: 0.75rem 1.5rem; font-size: 1rem;">ביקורת לעסק חדש</a>
+        <!-- Map Section (hidden by default) -->
+        <div id="map-section" class="hidden bg-white shadow-md rounded-lg overflow-hidden mb-8 p-6">
+            <h3 class="text-lg font-semibold mb-4 text-gray-700">איתור וסינון לפי מיקום</h3>
+            <div class="mb-4">
+                <input id="map-search-input" type="text" placeholder="חפש כתובת..."
+                    class="w-full p-2 border border-gray-300 rounded shadow-sm focus:ring-2 focus:ring-blue-500 text-sm">
             </div>
-            <table id="business-table">
+            <div id="dashboard-map" class="w-full rounded-lg shadow-md border border-gray-200" style="height:384px;"></div>
+        </div>
+
+        <!-- Calendar View -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-8 p-6">
+            <div class="flex justify-between items-center mb-6">
+                <button onclick="changeMonth(-1)" class="p-2 hover:bg-gray-100 rounded-full text-gray-600" title="חודש הבא">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <h3 id="calendar-title" class="text-xl font-bold text-gray-800"></h3>
+                <div class="flex items-center gap-2">
+                    <button onclick="changeMonth(1)" class="p-2 hover:bg-gray-100 rounded-full text-gray-600" title="חודש קודם">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button onclick="goToToday()"
+                        class="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded-full hover:bg-blue-100 transition-colors">
+                        היום
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-7 gap-2 text-center mb-2">
+                <div class="font-bold text-gray-500 text-sm">א'</div>
+                <div class="font-bold text-gray-500 text-sm">ב'</div>
+                <div class="font-bold text-gray-500 text-sm">ג'</div>
+                <div class="font-bold text-gray-500 text-sm">ד'</div>
+                <div class="font-bold text-gray-500 text-sm">ה'</div>
+                <div class="font-bold text-gray-500 text-sm">ו'</div>
+                <div class="font-bold text-gray-500 text-sm">ש'</div>
+            </div>
+            <div id="calendar-grid" class="grid grid-cols-7 gap-2">
+                <!-- Calendar days rendered by JS -->
+            </div>
+        </div>
+
+        <!-- Reports Table -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mb-8">
+            <table class="min-w-full leading-normal">
                 <thead>
                     <tr>
-                        <th>שם העסק</th>
-                        <th>כתובת</th>
-                        <th>בעלים</th>
-                        <th>פריט רישוי</th>
-                        <th>פעולות</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">תאריך ביקור</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שם העסק</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">כתובת</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">מפקח אחראי</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">סטטוס</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">פעולות</th>
+                    </tr>
+                </thead>
+                <tbody id="reports-tbody">
+                    <tr><td colspan="6" class="px-5 py-5 text-center text-gray-500">טוען דו"חות...</td></tr>
+                </tbody>
+            </table>
+            <div id="no-reports-msg" class="hidden p-5 text-center text-gray-500">לא נמצאו דו"חות התואמים את החיפוש</div>
+        </div>
+
+        <!-- Business List Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="flex justify-between items-center px-5 py-4 border-b border-gray-200 bg-gray-50">
+                <h3 class="text-lg font-semibold text-gray-700">רשימת עסקים</h3>
+                <div class="flex items-center gap-3">
+                    <input type="text" id="search-input" placeholder="חפש לפי שם עסק..."
+                        class="border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        oninput="filterBusinesses()">
+                    <a href="inspection.html"
+                        class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">ביקורת לעסק חדש</a>
+                </div>
+            </div>
+            <table id="business-table" class="min-w-full leading-normal">
+                <thead>
+                    <tr>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">שם העסק</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">כתובת</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">בעלים</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">פריט רישוי</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">פעולות</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td colspan="5" style="text-align:center;">טוען נתונים...</td></tr>
+                    <tr><td colspan="5" class="px-5 py-5 text-center text-gray-500">טוען נתונים...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <footer>
+    <!-- Report Details Modal -->
+    <div id="report-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center z-50">
+        <div class="relative bg-white rounded-lg shadow-xl p-8 w-full max-w-2xl m-4" style="max-height:90vh;overflow-y:auto;">
+            <button onclick="closeModal()" class="absolute top-4 left-4 text-gray-500 hover:text-gray-700">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <footer class="text-center py-4 bg-white border-t border-gray-200 text-gray-500 text-sm mt-auto">
         &copy; 2026 מערכת רישוי עסקים - מועצה אזורית. כל הזכויות שמורות.
     </footer>
 
-    <!-- Google Maps API - Replace YOUR_API_KEY with your actual key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACDDPr_yV4rSChZBQbVpLn_LEzttM3hC4&libraries=places&loading=async&callback=initMap" async defer></script>
+    <script>
+        // Load Google Maps API key from server (same approach as inspection.html)
+        fetch('/api/config/google-maps')
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                var script = document.createElement('script');
+                script.src = 'https://maps.googleapis.com/maps/api/js?key=' + data.key + '&libraries=places&loading=async';
+                script.async = true;
+                script.defer = true;
+                document.head.appendChild(script);
+            })
+            .catch(function(err) { console.warn('Google Maps API not loaded:', err); });
+    </script>
 
     <script>
-        // 1. בדיקת התחברות
         const token = localStorage.getItem('token');
         const userStr = localStorage.getItem('user');
-        
-        if (!token) {
-            window.location.href = 'login.html';
-        }
+
+        if (!token) window.location.href = 'login.html';
 
         if (userStr) {
             try {
                 const user = JSON.parse(userStr);
-                document.getElementById('user-name').textContent = `שלום, ${user.fullName}`;
+                document.getElementById('user-name').textContent = 'שלום, ' + user.fullName;
                 if (user.role === 'admin') {
                     const adminLink = document.createElement('a');
                     adminLink.href = 'admin-dashboard.html';
                     adminLink.textContent = 'פאנל ניהול';
-                    adminLink.className = 'admin-link';
+                    adminLink.className = 'text-blue-600 text-sm font-medium hover:underline';
                     document.getElementById('admin-link-placeholder').appendChild(adminLink);
                 }
-            } catch (e) {
-                console.error("Failed to parse user data from localStorage, logging out.", e);
-                logout();
-            }
+            } catch (e) { console.error(e); logout(); }
         }
 
         function logout() {
@@ -218,139 +194,319 @@
             window.location.href = 'login.html';
         }
 
-        let map;
-        let geocoder;
-        let businessesData = [];
+        var allReports = [];
+        var filteredReports = [];
+        var businessesData = [];
+        var currentDate = new Date();
+        var mapVisible = false;
+        var dashboardMap = null;
+        var dashboardGeocoder = null;
 
-        function initMap() {
-            // Default center (Yoav Regional Council area approx)
-            const defaultCenter = { lat: 31.6, lng: 34.8 }; 
-            map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 11,
-                center: defaultCenter,
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('he-IL', {
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit'
             });
-            geocoder = new google.maps.Geocoder();
-            addAllMarkers();
         }
 
-        function addAllMarkers() {
-            if (map && geocoder && businessesData.length > 0) {
-                businessesData.forEach(biz => addMarkerForBusiness(biz));
+        function getStatusBadge(status) {
+            var map = {
+                'pass':    '<span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">עבר בהצלחה</span>',
+                'fail':    '<span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">נכשל</span>',
+                'warning': '<span class="px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">אזהרה</span>'
+            };
+            return map[status] || '<span class="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 rounded-full">ממתין</span>';
+        }
+
+        function getRiskLevelColor(level) {
+            var map = { high: 'text-red-600', medium: 'text-yellow-600', low: 'text-green-600' };
+            return map[(level || '').toLowerCase()] || 'text-gray-600';
+        }
+
+        async function fetchReports() {
+            try {
+                var res = await fetch('/api/reports', { headers: { 'Authorization': 'Bearer ' + token } });
+                if (res.status === 401) { logout(); return; }
+                if (!res.ok) throw new Error('Failed to fetch reports');
+                allReports = await res.json();
+                filteredReports = allReports.slice();
+                filterReports();
+                renderCalendar();
+            } catch (err) {
+                console.error('Error fetching reports:', err);
+                document.getElementById('reports-tbody').innerHTML =
+                    '<tr><td colspan="6" class="px-5 py-5 text-center text-red-500">שגיאה בטעינת הדו"חות</td></tr>';
+                renderCalendar();
             }
         }
 
-        function addMarkerForBusiness(business) {
-            if (!geocoder || !map) return;
+        function filterReports() {
+            var search = document.getElementById('report-search').value.toLowerCase();
+            var year = currentDate.getFullYear();
+            var month = currentDate.getMonth();
 
-            geocoder.geocode({ 'address': business.address }, function(results, status) {
-                if (status === 'OK') {
-                    const marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location,
-                        title: business.businessName
-                    });
-
-                    const infowindow = new google.maps.InfoWindow({
-                        content: `<strong>${business.businessName}</strong><br>${business.address}`
-                    });
-
-                    marker.addListener("click", () => {
-                        infowindow.open(map, marker);
-                    });
-                } else {
-                    console.warn('Geocode was not successful for the following reason: ' + status);
-                }
+            filteredReports = allReports.filter(function(r) {
+                var d = new Date(r.visitDate);
+                var sameMonth = d.getMonth() === month && d.getFullYear() === year;
+                if (!sameMonth) return false;
+                var biz = (r.Business && r.Business.businessName ? r.Business.businessName : '').toLowerCase();
+                var inspector = (r.inspector && r.inspector.fullName ? r.inspector.fullName : '').toLowerCase();
+                return biz.includes(search) || inspector.includes(search);
             });
+            renderReportsTable();
         }
 
-        // 2. שליפת נתונים מהשרת
-        async function fetchBusinesses() {
-            try {
-                const response = await fetch('/api/businesses', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
+        function renderReportsTable() {
+            var tbody = document.getElementById('reports-tbody');
+            var noMsg = document.getElementById('no-reports-msg');
+
+            if (filteredReports.length === 0) {
+                tbody.innerHTML = '';
+                noMsg.classList.remove('hidden');
+                return;
+            }
+            noMsg.classList.add('hidden');
+
+            tbody.innerHTML = filteredReports.map(function(r) {
+                return '<tr class="hover:bg-gray-50">' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm">' + formatDate(r.visitDate) + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm font-medium">' + (r.Business && r.Business.businessName ? r.Business.businessName : '-') + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm">' + (r.Business && r.Business.address ? r.Business.address : '-') + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm">' + (r.inspector && r.inspector.fullName ? r.inspector.fullName : '-') + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm text-center">' + getStatusBadge(r.status) + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm text-center">' +
+                        '<button onclick="openReportModal(' + r.id + ')" class="text-blue-600 hover:text-blue-900 text-sm">צפה בדו"ח</button>' +
+                    '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function openReportModal(id) {
+            var r = allReports.find(function(x) { return x.id === id; });
+            if (!r) return;
+
+            var aiHtml = '';
+            if (r.aiRiskAssessment) {
+                var ai = r.aiRiskAssessment;
+                var recList = (ai.recommendations || []).map(function(rec) { return '<li>' + rec + '</li>'; }).join('');
+                aiHtml = '<div class="mb-6 border-t pt-4">' +
+                    '<h4 class="text-lg font-semibold mb-2 text-purple-700 flex items-center">' +
+                    '<span class="ml-2">🤖</span> ניתוח סיכונים (AI)</h4>' +
+                    '<div class="bg-purple-50 p-4 rounded-lg border border-purple-100">' +
+                    '<div class="mb-2"><span class="font-bold">רמת סיכון: </span>' +
+                    '<span class="font-bold ' + getRiskLevelColor(ai.riskLevel) + '">' + ai.riskLevel + '</span></div>' +
+                    '<p class="mb-3 text-gray-700">' + ai.summary + '</p>' +
+                    (recList ? '<div><span class="font-bold block mb-1">המלצות:</span><ul class="list-disc list-inside text-gray-700">' + recList + '</ul></div>' : '') +
+                    '</div></div>';
+            }
+
+            var pdfBtn = r.pdfPath
+                ? '<a href="' + r.pdfPath + '" target="_blank" rel="noopener noreferrer"' +
+                  ' class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition text-sm">הורד PDF</a>'
+                : '';
+
+            var bizName = r.Business && r.Business.businessName ? r.Business.businessName : '';
+            var bizAddr = r.Business && r.Business.address ? r.Business.address : '-';
+            var inspName = r.inspector && r.inspector.fullName ? r.inspector.fullName : '-';
+
+            document.getElementById('modal-content').innerHTML =
+                '<h2 class="text-2xl font-bold mb-4 text-gray-800">דו"ח ביקורת: ' + bizName + '</h2>' +
+                '<div class="grid grid-cols-2 gap-4 mb-6">' +
+                '<div><p class="text-sm text-gray-500">תאריך ביקור</p><p class="font-medium">' + formatDate(r.visitDate) + '</p></div>' +
+                '<div><p class="text-sm text-gray-500">מפקח</p><p class="font-medium">' + inspName + '</p></div>' +
+                '<div><p class="text-sm text-gray-500">סטטוס</p><div class="mt-1">' + getStatusBadge(r.status) + '</div></div>' +
+                '<div><p class="text-sm text-gray-500">כתובת</p><p class="font-medium">' + bizAddr + '</p></div>' +
+                '</div>' +
+                '<div class="mb-6">' +
+                '<h4 class="text-lg font-semibold mb-2 text-gray-700">ממצאי הביקורת</h4>' +
+                '<p class="bg-gray-50 p-4 rounded-lg text-gray-700 whitespace-pre-wrap">' + (r.findings || 'אין ממצאים רשומים.') + '</p>' +
+                '</div>' +
+                aiHtml +
+                '<div class="flex justify-end gap-3 mt-6">' +
+                pdfBtn +
+                '<button onclick="closeModal()" class="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition text-sm">סגור</button>' +
+                '</div>';
+
+            document.getElementById('report-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('report-modal').classList.add('hidden');
+        }
+
+        document.getElementById('report-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        function renderCalendar() {
+            var year = currentDate.getFullYear();
+            var month = currentDate.getMonth();
+
+            document.getElementById('calendar-title').textContent =
+                currentDate.toLocaleDateString('he-IL', { month: 'long', year: 'numeric' });
+
+            var daysInMonth = new Date(year, month + 1, 0).getDate();
+            var firstDay = new Date(year, month, 1).getDay();
+
+            var grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            for (var i = 0; i < firstDay; i++) {
+                var empty = document.createElement('div');
+                empty.className = 'h-24';
+                grid.appendChild(empty);
+            }
+
+            var today = new Date();
+
+            for (var day = 1; day <= daysInMonth; day++) {
+                var dayReports = allReports.filter(function(r) {
+                    var d = new Date(r.visitDate);
+                    return d.getDate() === day && d.getMonth() === month && d.getFullYear() === year;
+                });
+
+                var isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+
+                var cell = document.createElement('div');
+                cell.className = 'h-24 border rounded-lg p-2 flex flex-col items-start justify-between ' +
+                    (isToday ? 'border-blue-400 bg-blue-50' : 'bg-gray-50 hover:bg-gray-100');
+
+                var dots = dayReports.map(function(r) {
+                    var color = r.status === 'pass' ? 'bg-green-500' : r.status === 'fail' ? 'bg-red-500' : 'bg-yellow-500';
+                    var title = r.Business && r.Business.businessName ? r.Business.businessName : '';
+                    return '<div class="w-2 h-2 rounded-full ' + color + '" title="' + title + '"></div>';
+                }).join('');
+
+                var countBadge = dayReports.length > 0
+                    ? '<span class="text-xs text-gray-500 mr-auto">' + dayReports.length + '</span>'
+                    : '';
+
+                cell.innerHTML =
+                    '<span class="font-semibold ' + (isToday ? 'text-blue-700' : 'text-gray-700') + ' text-sm">' + day + '</span>' +
+                    '<div class="flex flex-wrap gap-1 w-full">' + dots + countBadge + '</div>';
+
+                grid.appendChild(cell);
+            }
+        }
+
+        function changeMonth(offset) {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + offset, 1);
+            filterReports();
+            renderCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            filterReports();
+            renderCalendar();
+        }
+
+        function toggleMap() {
+            mapVisible = !mapVisible;
+            var section = document.getElementById('map-section');
+            var btnText = document.getElementById('map-btn-text');
+            if (mapVisible) {
+                section.classList.remove('hidden');
+                btnText.textContent = 'הסתר מפה';
+                initDashboardMap();
+            } else {
+                section.classList.add('hidden');
+                btnText.textContent = 'חיפוש במפה';
+            }
+        }
+
+        function initDashboardMap() {
+            if (dashboardMap) return;
+            if (typeof google === 'undefined') {
+                console.warn('Google Maps not loaded yet');
+                return;
+            }
+            dashboardMap = new google.maps.Map(document.getElementById('dashboard-map'), {
+                center: { lat: 31.6, lng: 34.8 },
+                zoom: 11
+            });
+            dashboardGeocoder = new google.maps.Geocoder();
+
+            var input = document.getElementById('map-search-input');
+            var autocomplete = new google.maps.places.Autocomplete(input, {
+                componentRestrictions: { country: 'il' }
+            });
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+                if (!place.geometry) return;
+                dashboardMap.setCenter(place.geometry.location);
+                dashboardMap.setZoom(15);
+                document.getElementById('report-search').value = place.formatted_address || '';
+                filterReports();
+            });
+
+            addBusinessMarkers();
+        }
+
+        function addBusinessMarkers() {
+            if (!dashboardMap || !dashboardGeocoder) return;
+            businessesData.forEach(function(biz) {
+                if (!biz.address) return;
+                dashboardGeocoder.geocode({ address: biz.address }, function(results, status) {
+                    if (status === 'OK' && results[0]) {
+                        var marker = new google.maps.Marker({
+                            map: dashboardMap,
+                            position: results[0].geometry.location,
+                            title: biz.businessName
+                        });
+                        var iw = new google.maps.InfoWindow({
+                            content: '<strong>' + biz.businessName + '</strong><br>' + biz.address
+                        });
+                        marker.addListener('click', function() { iw.open(dashboardMap, marker); });
                     }
                 });
-                
-                if (response.status === 401) {
-                    logout(); // טוקן פג תוקף
-                    return;
-                }
-
-                const businesses = await response.json();
-                businessesData = businesses;
-                const tbody = document.querySelector('#business-table tbody');
-                tbody.innerHTML = '';
-
-                if (businesses.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">לא נמצאו עסקים במערכת</td></tr>';
-                    return;
-                }
-
-                businesses.forEach(biz => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${biz.businessName}</td>
-                        <td>${biz.address}</td>
-                        <td>${biz.ownerName}</td>
-                        <td>${biz.LicensingItem ? biz.LicensingItem.name : '-'}</td>
-                        <td>
-                            <a class="action-btn" href="#" onclick="alert('צפייה בעסק ${biz.id}')">פרטים</a>
-                            <a class="action-btn" href="inspection.html?businessId=${biz.id}">ביקורת חדשה</a>
-                            <a class="action-btn" href="reports-history.html?businessId=${biz.id}">היסטוריה</a>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-                
-                addAllMarkers();
-
-                // Populate Calendar (Mock data for now based on businesses, ideally fetch reports)
-                const calendarDiv = document.getElementById('calendar');
-                calendarDiv.innerHTML = '<ul style="list-style: none; padding: 0;">';
-                // Fetch reports for calendar
-                // For simplicity in this step, we'll just show a placeholder list or fetch if endpoint exists
-                // Let's try to fetch recent reports if possible, or just show a static list for now as requested structure
-                // Assuming we want to show history. We can fetch all reports if an endpoint exists, or just show a message.
-                // Since getReportsByBusiness exists but getAllReports might not be exposed or efficient for all history here.
-                // I'll add a placeholder for now.
-                calendarDiv.innerHTML += `
-                    <li style="padding: 10px; border-bottom: 1px solid #eee;">
-                        <strong>היום:</strong> ביקורת במסעדת הדקל
-                    </li>
-                    <li style="padding: 10px; border-bottom: 1px solid #eee;">
-                        <strong>מחר:</strong> ביקורת במפעל המתכת
-                    </li>
-                    <li style="padding: 10px; border-bottom: 1px solid #eee; color: #666;">
-                        <strong>היסטוריה:</strong> 5 ביקורות בוצעו השבוע
-                    </li>
-                `;
-                calendarDiv.innerHTML += '</ul>';
-
-            } catch (error) {
-                console.error('Error:', error);
-                document.querySelector('#business-table tbody').innerHTML = 
-                    '<tr><td colspan="5" style="text-align:center; color:red;">שגיאה בטעינת נתונים</td></tr>';
-            }
-        }
-
-        // 3. סינון עסקים
-        function filterBusinesses() {
-            const input = document.getElementById('search-input');
-            const filter = input.value.toLowerCase();
-            const rows = document.querySelectorAll('#business-table tbody tr');
-
-            rows.forEach(row => {
-                const nameCell = row.getElementsByTagName('td')[0];
-                if (nameCell) {
-                    const txtValue = nameCell.textContent || nameCell.innerText;
-                    row.style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? "" : "none";
-                }
             });
         }
 
-        // טעינה ראשונית
+        async function fetchBusinesses() {
+            try {
+                var res = await fetch('/api/businesses', { headers: { 'Authorization': 'Bearer ' + token } });
+                if (res.status === 401) { logout(); return; }
+                if (!res.ok) throw new Error('Failed');
+                businessesData = await res.json();
+                renderBusinessTable(businessesData);
+                if (dashboardMap) addBusinessMarkers();
+            } catch (err) {
+                console.error(err);
+                document.querySelector('#business-table tbody').innerHTML =
+                    '<tr><td colspan="5" class="px-5 py-5 text-center text-red-500">שגיאה בטעינת נתונים</td></tr>';
+            }
+        }
+
+        function renderBusinessTable(businesses) {
+            var tbody = document.querySelector('#business-table tbody');
+            if (businesses.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-5 text-center text-gray-500">לא נמצאו עסקים במערכת</td></tr>';
+                return;
+            }
+            tbody.innerHTML = businesses.map(function(biz) {
+                return '<tr class="hover:bg-gray-50">' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm font-medium">' + biz.businessName + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm">' + biz.address + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm">' + biz.ownerName + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm">' + (biz.LicensingItem ? biz.LicensingItem.name : '-') + '</td>' +
+                    '<td class="px-5 py-4 border-b border-gray-200 text-sm text-center">' +
+                        '<a class="text-blue-600 hover:text-blue-900 ml-3" href="inspection.html?businessId=' + biz.id + '">ביקורת חדשה</a>' +
+                        '<a class="text-green-600 hover:text-green-900" href="reports-history.html?businessId=' + biz.id + '">היסטוריה</a>' +
+                    '</td>' +
+                '</tr>';
+            }).join('');
+        }
+
+        function filterBusinesses() {
+            var filter = document.getElementById('search-input').value.toLowerCase();
+            var filtered = businessesData.filter(function(b) { return b.businessName.toLowerCase().includes(filter); });
+            renderBusinessTable(filtered);
+        }
+
+        fetchReports();
         fetchBusinesses();
+        renderCalendar();
     </script>
 </body>
 </html>

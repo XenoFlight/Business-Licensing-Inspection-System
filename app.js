@@ -8,6 +8,7 @@ const licensingRoutes = require('./routes/licensingRoutes');
 const businessRoutes = require('./routes/businessRoutes');
 const defectRoutes = require('./routes/defectRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 // אתחול האפליקציה
 // Initialize App
@@ -57,6 +58,7 @@ app.use('/api/licensing-items', licensingRoutes);
 app.use('/api/businesses', businessRoutes);
 app.use('/api/defects', defectRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/reports', reportRoutes);
 
 // טיפול בשגיאות 404 (נתיב לא נמצא)
 // 404 Error Handling

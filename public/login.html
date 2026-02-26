@@ -4,99 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>כניסה למערכת | רישוי עסקים</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
-            direction: rtl;
-        }
-        .login-container {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 1.5rem;
-        }
-        .input-group {
-            margin-bottom: 1rem;
-            text-align: right;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-        }
-        input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #error-message {
-            color: red;
-            margin-top: 1rem;
-            min-height: 1.2em;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            padding: 1rem;
-            background-color: #f0f2f5;
-            color: #666;
-            font-size: 0.9rem;
-        }
-    </style>
+    <link rel="stylesheet" href="/tailwind.min.css">
 </head>
-<body>
+<body class="bg-gray-100 flex flex-col justify-center items-center min-h-screen" dir="rtl">
 
-    <div class="login-container">
-        <h1>כניסה למערכת</h1>
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md text-center">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">כניסה למערכת</h1>
         <form id="login-form">
-            <div class="input-group">
-                <label for="email">דואר אלקטרוני</label>
-                <input type="email" id="email" name="email" autocomplete="username" required>
+            <div class="mb-4 text-right">
+                <label for="email" class="block text-sm font-medium text-gray-600 mb-1">דואר אלקטרוני</label>
+                <input type="email" id="email" name="email" autocomplete="username" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
             </div>
-            <div class="input-group">
-                <label for="password">סיסמה</label>
-                <input type="password" id="password" name="password" autocomplete="current-password" required>
+            <div class="mb-6 text-right">
+                <label for="password" class="block text-sm font-medium text-gray-600 mb-1">סיסמה</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
             </div>
-            <button type="submit">כניסה</button>
+            <button type="submit"
+                class="w-full py-3 bg-blue-600 text-white rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors">כניסה</button>
         </form>
-        <p id="error-message"></p>
-        <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #666;">
-            אין לך חשבון? <a href="register.html" style="color: #007bff; text-decoration: none;">הירשם כאן</a>
+        <p id="error-message" class="text-red-500 mt-4 text-sm min-h-5"></p>
+        <div class="mt-6 text-sm text-gray-500">
+            אין לך חשבון? <a href="register.html" class="text-blue-600 hover:underline">הירשם כאן</a>
         </div>
     </div>
 
-    <footer>
+    <footer class="fixed bottom-0 w-full text-center py-3 bg-gray-100 text-gray-500 text-sm">
         &copy; 2026 מערכת רישוי עסקים - מועצה אזורית. כל הזכויות שמורות.
     </footer>
 

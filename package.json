@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build:css": "tailwindcss -c tailwind.config.js -o public/tailwind.min.css --minify"
   },
   "keywords": [
     "israel",
@@ -31,6 +32,7 @@
     "sequelize": "^6.35.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "tailwindcss": "^3.4.19"
   }
 }
